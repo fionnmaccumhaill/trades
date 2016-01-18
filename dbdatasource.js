@@ -6,16 +6,15 @@ var dbHost = configJSON["finance"].host;
 var dbUser = configJSON["finance"].user;
 var dbPwd = configJSON["finance"].pwd;
 var dbName = configJSON["finance"].database;
-
 var mysql      = require('mysql');
 
 module.exports = {
-    getConnection: function (aHost, aUser, aPwd, aDatabase) {
+    getConnection: function () {
         var connection = mysql.createConnection({
-            host     : aHost,
-            user     : aUser,
-            password : aPwd,
-            database : aDatabase
+            host     : dbHost,
+            user     : dbUser,
+            password : dbPwd,
+            database : dbName
         });
         return connection;
     }

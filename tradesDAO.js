@@ -2,6 +2,7 @@
 
 var mysql      = require('mysql');
 var theDatasource = require('./dbdatasource.js');
+var theDBconstraints = require('./dbconstraints.js');
 
 var tickers;
 
@@ -9,7 +10,7 @@ function getTickerList(aCallback) {
     var connection = theDatasource.getConnection();
     connection.connect(function(err) {
         // connected! (unless `err` is set)
-        if(err) console.log("bad connection");
+        if(err) console.log("select bad connection");
     });
     var retValue = [];
     var sql = 'SELECT TICKER, COUNT(*) FROM TRADES ' +
@@ -27,6 +28,7 @@ function getTickerList(aCallback) {
               //  connection.end(function(err) {
             //       console.log("connection closed");
             //    });
+                connection.end();
                 aCallback(err, retValue);
             }
         }
@@ -38,6 +40,20 @@ function getTickerList(aCallback) {
 
 function addQuote(aTicker, aDate, aTime, aPrice, aCallback) {
     // insert quote into trades
+    var connection = theDatasource.getConnection();
+    connection.connect(function(err) {
+        // connected! (unless `err` is set)
+        if(err) console.log("insert bad connection"+err);
+    });
+    var post  = {ticker: aTicker, trade_date: aDate,
+                trade_time: aTime, price: aPrice};
+    var query = connection.query('INSERT INTO trades SET ?', post,
+                                 function(err, result) {
+     //   if(err) console.log(err);
+        connection.end();
+        // Neat!
+    });
+    
 }
 
 module.exports = {
@@ -45,6 +61,10 @@ module.exports = {
         var theTickers = getTickerList(aCallback);
     },
     insertQuote: function (aTicker, aDate, aTime, aPrice, aCallback) {
-        addQuote(aTicker, aDate, aTime, aPrice, aCallback);
+        // check to see if this quote can be inserted in trades table
+        if(theDBconstraints.isAllowed(aTicker, aDate, aTime, aPrice)) {
+            addQuote(aTicker, aDate, aTime, aPrice, aCallback);
+       //     console.log('insert allowed');
+        } // else console.log('insert not allowed');
     }
 };

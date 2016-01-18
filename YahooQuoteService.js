@@ -6,6 +6,7 @@
 var parse = require('csv-parse');
 
 var theRequest = require('request');
+var theTradesDAO = require('./tradesDAO.js');
 
 
 function runParser(aRequest) {
@@ -78,14 +79,14 @@ function getUrl(aUrl, aCallback) {
 function tradeCallback(aError, aBody) {
     var theOutput = runParser(aBody);
  //   parser.end();
-    var x = transformDate(theOutput[0][2]);
-    var y = transformTime(theOutput[0][3]);
     var outLength = theOutput.length;
-   // console.log('inside tradeCallback');
     for (var i=0; i<outLength; i++) {
-        // going to want to do something with the quote here
-   //     console.log(theOutput[i][0] + ":" + theOutput[i][1] + ":" +
-    //                theOutput[i][2] + ":" + theOutput[i][3])
+        var ticker, tdate, ttime, price;
+        ticker = theOutput[i][0];
+        price = theOutput[i][1];
+        tdate = transformDate(theOutput[i][2]);
+        ttime = transformTime(theOutput[i][3]);
+        theTradesDAO.insertQuote(ticker, tdate, ttime, price);
     }
 }
 
@@ -106,10 +107,9 @@ module.exports = {
         var splitArray = splitTickers(aTicker);
         var qURL;
         var splitLength = splitArray.length;
-        console.log('splitLength:'+splitLength);
+    //    console.log('splitLength:'+splitLength);
         for (var i=0; i<splitLength; i++) {
             qURL = yahooQuotePrefix + splitArray[i] + yahooQuoteSuffix;
-     //       console.log(qURL);
             getUrl(qURL, tradeCallback);   
         }
         // var qURL = yahooQuotePrefix + aTicker + yahooQuoteSuffix;

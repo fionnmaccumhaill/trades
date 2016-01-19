@@ -19,7 +19,7 @@ function runYahoo(aTickers) {
                 currDT.getFullYear()+' '+ currDT.getHours()+':'+
                 currDT.getMinutes());
     tickerReloadCount++;
-    if(tickerReloadCount>3) {
+    if(tickerReloadCount>10) {
         theTradesDAO.getTickers(tickerCallback);
         tickerReloadCount = 0;
     }

@@ -1,0 +1,32 @@
+{
+  "name": "trades",
+  "version": "1.0.0",
+  "description": "Retrieve and store stock quotes throughout the trading day",
+  "main": "index.js",
+  "dependencies": {
+    "csv": "^0.4.6",
+    "mysql": "^2.10.2",
+    "csv-parse": "^1.0.1",
+    "request": "^2.67.0",
+    "minimist": "^1.2.0",
+    "node-mysql": "^0.4.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fionnmaccumhaill/trades.git"
+  },
+  "keywords": [
+    "stock",
+    "quotes"
+  ],
+  "author": "Ed Foley",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fionnmaccumhaill/trades/issues"
+  },
+  "homepage": "https://github.com/fionnmaccumhaill/trades"
+}

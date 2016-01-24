@@ -13,8 +13,8 @@ function getTickerList(aCallback) {
         if(err) console.log("select bad connection");
     });
     var retValue = [];
-    var sql = 'SELECT TICKER, COUNT(*) FROM TRADES ' +
-        ' WHERE TRADE_DATE > DATE_SUB(CURDATE(), INTERVAL 47 DAY) ' +
+    var sql = 'SELECT TICKER, COUNT(*) FROM trades ' +
+        ' WHERE TRADE_DATE > DATE_SUB(CURDATE(), INTERVAL 5 DAY) ' +
         'GROUP BY TICKER';
     var query = connection.query(sql, function(err, result) {
         if(!err) {

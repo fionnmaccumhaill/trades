@@ -79,6 +79,10 @@ function tickerCallback(err, aTickers) {
 // instead of using hard-coded tickers, create a function to 
 // get tickers from the db
 var tickers = 'IBM,FB,MS,GS,GE,DIS,EL,ULTA';
-var theTradesDAO = require('./tradesDAO.js');
-theTradesDAO.getTickers(tickerCallback);
-// console.log('ticker count:'+dbTickers.length);
+if(posArg=='stats') {
+    runStats();
+}
+else {
+   theTradesDAO.getTickers(tickerCallback); 
+}
+

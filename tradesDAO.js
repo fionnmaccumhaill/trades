@@ -17,7 +17,7 @@ function getStatistics(aCallback) {
         ' MAX(TRADE_DATE) as maxtdate, MIN(TRADE_DATE) as mintdate, ' +
         ' (SELECT COUNT(*) FROM FINANCE.TRADES ' +
         '   WHERE TRADE_DATE = (SELECT MAX(TRADE_DATE) FROM ' +
-        '     FINANCE.TRADES)) as tradescnt ' +
+        '     FINANCE.TRADES_DAILY)) as tradescnt ' +
         '  FROM finance.trades ';
     var query = connection.query(sql, function(err, result) {
         if(!err) {

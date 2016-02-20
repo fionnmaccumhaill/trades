@@ -11,7 +11,14 @@ var tickerReloadCount = 0;
 var startupSwitch = true;
 
 var theQuoteService = require('./YahooQuoteService');
+var theTradesDAO = require('./tradesDAO');
 
+function getFormattedDate(aDate) {
+    var tMonth = aDate.getMonth()+1;
+    var tDay = aDate.getDate();
+    var tYear = aDate.getFullYear();
+    return tMonth + '/' + tDay + '/' + tYear;
+}
 function runYahoo(aTickers) {
     var currDT = new Date();
     var currMonth = currDT.getMonth()+1;
@@ -31,11 +38,25 @@ function runSingle(aTicker) {
     var tArray = [aTicker];
     theQuoteService.getQuote(tArray);
 }
+function runStats() {
+    console.log('\n'+'running stats');
+    theTradesDAO.getStats(statsCallback);
+}
+
+function statsCallback(err, aStats) {
+    if(!err) {
+        console.log('ticker cnt:'+aStats['tickercnt']);
+        console.log('max. trade date:'+
+                    getFormattedDate(aStats['maxtdate']));
+        console.log('min. trade date:'+
+                    getFormattedDate(aStats['mintdate']));
+        console.log('today\'s count:'+aStats['tradescnt']);
+    }
+}
 
 function tickerCallback(err, aTickers) {
     if(!err) {
         dbTickers = aTickers;
-   //     console.log(aTickers);
         if(startupSwitch) {
             startupSwitch = false;
             switch (posArg)
@@ -43,6 +64,8 @@ function tickerCallback(err, aTickers) {
                 case 'yahoo': runYahoo(dbTickers);
                     break;
                 case 'single': runSingle(singleTicker);
+                    break;
+                case 'stats': runStats();
                     break;
                 default: console.log('bad arg');
             }

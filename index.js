@@ -43,7 +43,7 @@ function runStats() {
     theTradesDAO.getStats(statsCallback);
 }
 function runPinger() {
-    console.log('running pinger');
+   // console.log('running pinger');
     theTradesDAO.getPingerCount(pingerCallback);
 }
 

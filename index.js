@@ -42,6 +42,10 @@ function runStats() {
     console.log('\n'+'running stats');
     theTradesDAO.getStats(statsCallback);
 }
+function runPinger() {
+    console.log('running pinger');
+    theTradesDAO.getPingerCount(pingerCallback);
+}
 
 function statsCallback(err, aStats) {
     if(!err) {
@@ -51,6 +55,12 @@ function statsCallback(err, aStats) {
         console.log('min. trade date:'+
                     getFormattedDate(aStats['mintdate']));
         console.log('today\'s count:'+aStats['tradescnt']);
+    }
+}
+function pingerCallback(err, aCount) {
+    if(!err) {
+        console.log('today\'s count:'+aCount['tradescnt']);
+        setTimeout(runPinger, 60000);
     }
 }
 
@@ -78,11 +88,13 @@ function tickerCallback(err, aTickers) {
 
 // instead of using hard-coded tickers, create a function to 
 // get tickers from the db
-var tickers = 'IBM,FB,MS,GS,GE,DIS,EL,ULTA';
+// var tickers = 'IBM,FB,MS,GS,GE,DIS,EL,ULTA';
 if(posArg=='stats') {
     runStats();
+} else {
+    if(posArg=='pinger') {
+        runPinger();
+    } else {
+        theTradesDAO.getTickers(tickerCallback); 
+    }
 }
-else {
-   theTradesDAO.getTickers(tickerCallback); 
-}
-

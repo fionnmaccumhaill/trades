@@ -15,9 +15,10 @@ function getStatistics(aCallback) {
     // var retValue = [];
     var sql = 'SELECT COUNT(DISTINCT TICKER) as tickercnt, ' +
         ' MAX(TRADE_DATE) as maxtdate, MIN(TRADE_DATE) as mintdate, ' +
-        ' (SELECT COUNT(*) FROM FINANCE.TRADES ' +
+        ' (SELECT COUNT(*) FROM finance.trades ' +
         '   WHERE TRADE_DATE = (SELECT MAX(TRADE_DATE) FROM ' +
-        '     FINANCE.TRADES_DAILY)) as tradescnt ' +
+        '     finance.trades_daily)) as tradescnt ' +
+        '     finance.trades_daily)) as tradescnt ' +
         '  FROM finance.trades ';
     var query = connection.query(sql, function(err, result) {
         if(!err) {
@@ -44,9 +45,9 @@ function getTodaysCount(aCallback) {
         if(err) console.log("select bad connection");
     });
     // var retValue = [];
-    var sql = 'SELECT COUNT(*) as tradescnt FROM FINANCE.TRADES ' +
+    var sql = 'SELECT COUNT(*) as tradescnt FROM finance.trades ' +
         '   WHERE TRADE_DATE = (SELECT MAX(TRADE_DATE) FROM ' +
-        '     FINANCE.TRADES_DAILY)';
+        '     finance.trades)';
     var query = connection.query(sql, function(err, result) {
         if(!err) {
             if (result.length  > 0) {
@@ -69,7 +70,7 @@ function getTickerList(aCallback) {
         if(err) console.log("select bad connection");
     });
     var retValue = [];
-    var sql = 'SELECT TICKER, COUNT(*) FROM trades ' +
+    var sql = 'SELECT TICKER, COUNT(*) FROM finance.trades ' +
         ' WHERE TRADE_DATE > DATE_SUB(CURDATE(), INTERVAL 5 DAY) ' +
         'GROUP BY TICKER';
     var query = connection.query(sql, function(err, result) {

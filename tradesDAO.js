@@ -18,7 +18,6 @@ function getStatistics(aCallback) {
         ' (SELECT COUNT(*) FROM finance.trades ' +
         '   WHERE TRADE_DATE = (SELECT MAX(TRADE_DATE) FROM ' +
         '     finance.trades_daily)) as tradescnt ' +
-        '     finance.trades_daily)) as tradescnt ' +
         '  FROM finance.trades ';
     var query = connection.query(sql, function(err, result) {
         if(!err) {

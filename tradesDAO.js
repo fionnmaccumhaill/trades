@@ -14,11 +14,12 @@ function getStatistics(aCallback) {
     });
     // var retValue = [];
     var sql = 'SELECT COUNT(DISTINCT TICKER) as tickercnt, ' +
-        ' MAX(TRADE_DATE) as maxtdate, MIN(TRADE_DATE) as mintdate, ' +
-        ' (SELECT COUNT(*) FROM finance.trades ' +
+        ' MAX(TRADE_DATE) as maxtdate, ' +
+        ' (select MIN(TRADE_DATE) from finance.trades) as mintdate, ' +
+        ' (SELECT COUNT(*) FROM finance.trades_daily ' +
         '   WHERE TRADE_DATE = (SELECT MAX(TRADE_DATE) FROM ' +
         '     finance.trades_daily)) as tradescnt ' +
-        '  FROM finance.trades ';
+        '  FROM finance.trades_daily ';
     var query = connection.query(sql, function(err, result) {
         if(!err) {
             if (result.length  > 0) {

@@ -18,7 +18,8 @@ function getStatistics(aCallback) {
         ' (select MIN(TRADE_DATE) from finance.trades) as mintdate, ' +
         ' (SELECT COUNT(*) FROM finance.trades_daily ' +
         '   WHERE TRADE_DATE = (SELECT MAX(TRADE_DATE) FROM ' +
-        '     finance.trades_daily)) as tradescnt ' +
+        '     finance.trades_daily)) as tradescnt, ' +
+        ' (select count(*) from finance.trades) as totcnt ' +
         '  FROM finance.trades_daily ';
     var query = connection.query(sql, function(err, result) {
         if(!err) {
@@ -28,6 +29,7 @@ function getStatistics(aCallback) {
                 retValue['maxtdate'] = result[0].maxtdate;
                 retValue['mintdate'] = result[0].mintdate;
                 retValue['tradescnt'] = result[0].tradescnt;
+                retValue['totcnt'] = result[0].totcnt;
             //    console.log('number of tickers:'+rsLength);
                 connection.end();
                 aCallback(err, retValue);

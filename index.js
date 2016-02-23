@@ -55,6 +55,7 @@ function statsCallback(err, aStats) {
         console.log('min. trade date:'+
                     getFormattedDate(aStats['mintdate']));
         console.log('today\'s count:'+aStats['tradescnt']);
+        console.log('total count:'+aStats['totcnt']);
     }
 }
 function pingerCallback(err, aCount) {

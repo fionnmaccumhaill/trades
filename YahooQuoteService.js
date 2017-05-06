@@ -36,20 +36,26 @@ function transformDate(aYahooDate) {
     var ddstr = dateArray[1];
     var yyyystr = dateArray[2];
     if (mmstr.length==1) mmstr = '0' + mmstr;
-    if (ddstr.length==1) mmstr = '0' + ddstr;
-    return yyyystr+'-'+mmstr+'-'+ddstr;
+    if (ddstr.length==1) ddstr = '0' + ddstr;
+    var tdate = yyyystr+'-'+mmstr+'-'+ddstr;
+    return tdate;
 }
 
 // Yahoo returns a date in the format hh:mmAM
 // Mysql needs it in hh:mm:ss with a 24 hour time
 function transformTime(aYahooTime) {
     var timeArray = aYahooTime.split(':');
-    var ssint = timeArray[1].substring(0, 2);
-    var ampm = timeArray[1].substring(2, 4);
-    var hhint = parseInt(timeArray[0]);
-    if(ampm=='pm' && hhint < 12) hhint = hhint+12;
-    var sHh = hhint.toString();
-    return sHh+':'+ssint+':00';
+    try {
+        var ssint = timeArray[1].substring(0, 2);
+        var ampm = timeArray[1].substring(2, 4);
+        var hhint = parseInt(timeArray[0]);
+        if(ampm=='pm' && hhint < 12) hhint = hhint+12;
+        var sHh = hhint.toString();
+        return sHh+':'+ssint+':00';
+    } catch (ex1) {
+        console.log('exception processing:'+aYahooTime);
+        return null;
+    }
 }
 
 // Yahoo Quote Options:
@@ -74,7 +80,11 @@ function getUrl(aUrl, aCallback) {
            if (!error && response.statusCode === 200) {
                aCallback(error, body);
            }
-})}
+        if(error) {
+            console.log("error getting url:"+aUrl);
+        }
+    }); 
+}
 
 function tradeCallback(aError, aBody) {
     var theOutput = runParser(aBody);
@@ -93,7 +103,7 @@ function tradeCallback(aError, aBody) {
 function splitTickers(aTickers) {
     // console.log('inside splitTickers');
     var splitArray = [];
-    var i,j,temparray,chunk = 10;
+    var i,j,temparray,chunk = 5;
     for (i=0,j=aTickers.length; i<j; i+=chunk) {
         temparray = aTickers.slice(i,i+chunk);
      //   console.log(temparray);
